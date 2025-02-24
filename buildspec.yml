@@ -12,7 +12,8 @@ phases:
     commands:
       - echo Installing Docker...
       - sudo yum install -y docker
-      - sudo service docker start
+      - sudo systemctl start docker
+      - sudo systemctl enable docker
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --no-include-email --region $AWS_REGION)
   build:
