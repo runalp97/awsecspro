@@ -5,7 +5,7 @@ env:
     AWS_ACCOUNT_ID: "122610480795"
     AWS_REGION: "ap-south-1"  
     IMAGE_REPO_NAME: "awsecspro"
-    CONTAINER_IMAGE: "wordpress"
+    CONTAINER_IMAGE: "press1"
 
 phases:
   install:
