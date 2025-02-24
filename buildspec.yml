@@ -1,29 +1,26 @@
 version: 0.2
 
-env:
-  variables:
-    AWS_ACCOUNT_ID: "122610480795"
-    AWS_REGION: "ap-south-1"  
-    IMAGE_REPO_NAME: "awsecspro"
-    CONTAINER_IMAGE: "press1"
-
 phases:
   install:
+    runtime-versions:
+      docker: 20
     commands:
       - echo Installing Docker...
       - sudo yum install -y docker
-      - sudo nohup /usr/bin/dockerd &  # Start the Docker daemon in the background
+      - echo Starting Docker...
+      - sudo nohup /usr/bin/dockerd &
+      - sleep 20 # Wait for Docker to fully initialize
       - echo Logging in to Amazon ECR...
-      - $(aws ecr get-login --no-include-email --region $AWS_REGION)
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
   build:
     commands:
-      - echo Building the Docker image...
-      - docker build -t $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION .
-      - docker tag $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - echo Build started on `date`
+      # Your build steps here...
   post_build:
     commands:
-      - echo Pushing the Docker image to Amazon ECR...
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - echo Build completed on `date`
+      # Your post-build steps here...
+
 
 artifacts:
   files:
